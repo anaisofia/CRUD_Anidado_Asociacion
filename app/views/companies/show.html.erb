@@ -5,5 +5,52 @@
   <%= @company.name %>
 </p>
 
+
+<%= form_with(model: [ @company, @employee ], local:true) do |f| %>
+  <%= f.label :first_name %>:
+  <%= f.text_field :first_name %><br />
+
+  <%= f.label :last_name %>:
+  <%= f.text_field :last_name %><br />
+
+  <%= f.label :email %>:
+  <%= f.email_field :email %><br />
+
+  <%= f.label :area %>:
+  <%= f.select :area_id, @area.collect{|x| [x.name, x.id]}, id: :employee_area_id, prompt: "Select Area" %><br />
+
+  <%= f.hidden_field :company_id, value: @company.id %>
+
+  <%= f.submit %>
+<% end %>
+
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Area</th>
+      <th scope="col">Delete Employee?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% @company.employees.each do |employee| %>
+      <th scope="row">1</th>
+      <td><%= employee.first_name %></td>
+      <td><%= employee.last_name %></td>
+      <td><%= employee.email %></td>
+      <td><%= employee.area_id %></td>
+      <td><%= link_to "Yes", company_employee_path(@company, employee),
+      method: :delete %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
 <%= link_to 'Edit', edit_company_path(@company) %> |
 <%= link_to 'Back', companies_path %>
